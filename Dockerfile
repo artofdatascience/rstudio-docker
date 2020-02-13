@@ -33,7 +33,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     automake \
     libtool \
     bison \
-    cmake
+    cmake  \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN apt-get update && apt-get install -y --no-install-recommends tzdata apt-utils \
   && echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections \
@@ -70,9 +71,19 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libnetcdf-dev \
     libprotobuf-dev \
     protobuf-compiler  \
+    libsqlite-dev \
+    libpq-dev \
+    libssh2-1-dev \
+    libsasl2-dev \
+    libopenblas-dev \
+    libyaml-dev \
+    libarpack2-dev \
+    default-jdk \
+    libpng-dev \
+    libjpeg-dev \
     && rm -rf /var/lib/apt/lists/*
     
-RUN install2.r --error -n 8 -r 'http://cran.rstudio.com' \
+RUN install2.r --error -n 4 -r 'http://cran.rstudio.com' \
     httr \
     futile.logger \
     yaml \
@@ -84,4 +95,26 @@ RUN install2.r --error -n 8 -r 'http://cran.rstudio.com' \
     Hmisc \
     plumber \
     bookdown \
-    ggmap
+    ggmap \
+    tinytex \
+    testthat \
+    && rm -rf /tmp/downloaded_packages/ /tmp/*.rds
+
+RUN R -e 'tinytex::install_tinytex(extra_packages = c( \
+    "xcolor", \
+    "mdwtools", \
+    "tabu", \
+    "varwidth", \
+    "multirow", \
+    "wrapfig", \
+    "colortbl", \
+    "pdflscape", \
+    "threeparttable", \
+    "threeparttablex", \
+    "environ", \
+    "trimspaces", \
+    "ulem", \
+    "makecell", \
+    "epstopdf-pkg" \
+    ))'
+
